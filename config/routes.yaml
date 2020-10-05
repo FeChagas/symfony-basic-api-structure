@@ -1,0 +1,8 @@
+# register:
+#     path: /register
+#     controller: App\Controller\AuthController::register
+#     methods: POST
+
+login:
+    path:     /login
+    methods:  [POST]

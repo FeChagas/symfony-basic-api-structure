@@ -1,0 +1,15 @@
+v1_admin_controllers:
+    resource: ../../src/Controller/V1/Admin
+    type: annotation
+    prefix: /v1/admin
+    name_prefix: 'admin_'
+
+v1_trader_controllers:
+    resource: ../../src/Controller/V1/Customer
+    type: annotation
+    prefix: /v1/Customer
+    name_prefix: 'Customer_'
+
+kernel:
+    resource: ../../src/Kernel.php
+    type: annotation

@@ -1,0 +1,71 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    tmpFolderPath: '%kernel.project_dir%/public/tmp/'
+    uploadRoute: '/uploads/'
+    uploadFolder: '%kernel.project_dir%/public/uploads/'
+    
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        bind:
+            $tmpFolderPath: '%kernel.project_dir%/public/tmp/'
+            $uploadRoute: '/uploads/'
+            $uploadFolder: '%kernel.project_dir%/public/uploads/'
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    acme_api.event.authentication_failure_listener:
+        class: App\EventListener\JWTCustomResponse
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
+
+    acme_api.event.jwt_invalid_listener:
+        class: App\EventListener\JWTCustomResponse
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_invalid, method: onJWTInvalid }
+
+    acme_api.event.jwt_notfound_listener:
+        class: App\EventListener\JWTCustomResponse
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
+
+    acme_api.event.jwt_created_listener:
+        class: App\EventListener\JWTCustomResponse
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    acme_api.event.authentication_success_listener:
+        class: App\EventListener\JWTCustomResponse
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+            
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    get_set_method_normalizer:
+        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+        tags: [serializer.normalizer]
+
+    App\Service\FileUploader:
+        arguments:
+            $uploadFolder: '%uploadFolder%'
+
+    App\Service\File\SaveUploadedFileService:
+        arguments:
+            $tmpFolderPath: '%tmpFolderPath%'
