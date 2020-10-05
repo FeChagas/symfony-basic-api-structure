@@ -65,7 +65,3 @@ services:
     App\Service\FileUploader:
         arguments:
             $uploadFolder: '%uploadFolder%'
-
-    App\Service\File\SaveUploadedFileService:
-        arguments:
-            $tmpFolderPath: '%tmpFolderPath%'
