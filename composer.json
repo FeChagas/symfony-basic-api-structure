@@ -16,7 +16,7 @@
         "symfony/framework-bundle": "5.0.*",
         "symfony/notifier": "5.0.*",
         "symfony/orm-pack": "^1.0",
-        "symfony/security-bundle": "5.0.*",
+        "symfony/security-bundle": "5.4.*",
         "symfony/sendgrid-mailer": "5.0.*",
         "symfony/serializer": "5.0.*",
         "symfony/twig-pack": "^1.0",
